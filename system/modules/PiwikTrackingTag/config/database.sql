@@ -22,3 +22,21 @@ CREATE TABLE `tl_layout` (
   `piwik404` char(1) NOT NULL default '0',
   `piwikExtensions` text NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table `tl_page`
+--
+
+CREATE TABLE `tl_page` (
+  `piwikEnabled` char(1) NOT NULL default '',
+  `piwikPath` varchar(255) NOT NULL default '',
+  `piwikSiteID` varchar(4) NOT NULL default '',
+  `piwikUserToken` varchar(32) NOT NULL default '',
+  `piwikCountAdmins` char(1) NOT NULL default '0',
+  `piwikCountUsers` char(1) NOT NULL default '1',
+  `piwikPageName` char(1) NOT NULL default '0',
+  `piwik404` char(1) NOT NULL default '0',
+  `piwikExtensions` text NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
