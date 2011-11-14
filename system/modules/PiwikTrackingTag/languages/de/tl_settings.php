@@ -22,22 +22,20 @@
  *
  * PHP version 5
  * @copyright  Torben Stoffer 2009, MEN AT WORK 2011
- * @package    PiwikTrackingTag
+ * @package    Language
  * @license    GNU/LGPL
  * @filesource
- */ 
+ */
 
 /**
- * Hooks
+ * Legends
  */
-$GLOBALS['TL_HOOKS']['generatePage'][] = array('PiwikTrackingTag', 'generatePage');
-$GLOBALS['TL_HOOKS']['addCustomRegexp'][] = array('PiwikTrackingTag', 'validatePath');
-$GLOBALS['TL_HOOKS']['addCustomRegexp'][] = array('PiwikTrackingTag', 'validateUrl');
-$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('PiwikTrackingTag', 'checkExtensions');
+$GLOBALS['TL_LANG']['tl_settings']['piwik_legend'] = 'Piwik';
 
 /**
- * Download extensions
+ * Fields
  */
-$GLOBALS['TL_PIWIK'] = '7z,aac,arc,arj,asf,asx,avi,bin,csv,doc,exe,flv,gif,gz,gzip,hqx,jar,jpe,jpeg,js,mp2,mp3,mp4,mpe,mpeg,mov,movie,msi,msp,pdf,phps,png,ppt,qtm,ram,rar,sea,sit,tar,tgz,orrent,txt,wav,wma,wmv,wpd,xls,xml,z,zip';
+$GLOBALS['TL_LANG']['tl_settings']['piwikBlacklist'] = array('Blackliste für Piwik', 'Hier können Sie eine Liste der URLs pflegen auf denen Piwik nicht eingebunden werden soll.');
+$GLOBALS['TL_LANG']['tl_settings']['piwikUrl'] = array('URL', '');
 
 ?>

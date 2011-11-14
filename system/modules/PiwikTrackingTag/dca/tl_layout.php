@@ -84,7 +84,8 @@ $GLOBALS['TL_DCA']['tl_layout']['fields'] = array_merge(
 		'piwikExtensions' => array(
 			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikExtensions'],
 			// 'default' => '7z,aac,arc,arj,asf,asx,avi,bin,csv,doc,exe,flv,gif,gz,gzip,hqx,jar,jpe,jpeg,js,mp2,mp3,mp4,mpe,mpeg,mov,movie,msi,msp,pdf,phps,png,ppt,qtm,ram,rar,sea,sit,tar,tgz,orrent,txt,wav,wma,wmv,wpd,xls,xml,z,zip',
-			'default' => array_keys($GLOBALS['TL_PIWIK']),
+			//'default' => array_keys($GLOBALS['TL_PIWIK']),
+			'default' => $GLOBALS['TL_PIWIK'],
 			'inputType' => 'textarea',
 			'exclude' => true,
 			'eval' => array('tl_class' => 'long clr', 'style' => 'height:50px;', 'alwaysSave' => true),
@@ -125,17 +126,19 @@ $GLOBALS['TL_DCA']['tl_layout']['fields'] = array_merge(
 
 class tl_layout_PiwikTrackingTag extends Backend
 {
-	public function extensions($value)
-	{
-		if(trim($value) == '')
-		{
-			return $GLOBALS['TL_DCA']['tl_layout']['fields']['piwikExtensions']['default'];
-		}
-		else
-		{
-			return $value;
-		}
-	}
+
+    public function extensions($value)
+    {
+        if (trim($value) == '')
+        {
+            return $GLOBALS['TL_DCA']['tl_layout']['fields']['piwikExtensions']['default'];
+        }
+        else
+        {
+            return $value;
+        }
+    }
+
 }
 
 

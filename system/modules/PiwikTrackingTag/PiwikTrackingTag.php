@@ -25,123 +25,264 @@
  * @package    PiwikTrackingTag
  * @license    GNU/LGPL
  * @filesource
- */ 
+ */
 
-
+/**
+ * PiwikTrackingTag
+ */
 class PiwikTrackingTag extends Backend
 {
-	/**
+
+    // Template name
+    protected $strTemplate = 'mod_piwikTrackingTag';
+
+    /**
      * Get a page layout and return it as database result object.
      * This is a copy from PageRegular, see comments in parseFrontendTemplate() below for the reason why this is here.
+     * 
      * @param integer
      * @return object
      */
     protected function getPageLayout($intId)
     {
         $objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE id=?")
-                                    ->limit(1)
-                                    ->execute($intId);
-		
+                ->limit(1)
+                ->execute($intId);
+
         // Fallback layout
         if ($objLayout->numRows < 1)
         {
             $objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE fallback=?")
-                                        ->limit(1)
-                                        ->execute(1);
-        }
-        
-        // Die if there is no layout at all
-        if ($objLayout->numRows < 1)
-        {
-            $this->log('Could not find layout ID "' . $intId . '"', 'PageRegular getPageLayout()', TL_ERROR);
+                    ->limit(1)
+                    ->execute(1);
 
-            header('HTTP/1.1 501 Not Implemented');
-            die('No layout specified');
+            if ($objLayout->numRows < 1)
+            {
+                return FALSE;
+            }
         }
 
         return $objLayout;
-    } 
+    }
 
-       
-    public function outputFrontendTemplate($strContent, $strTemplate) {
+    /**
+     * Find the root page
+     * 
+     * @param int $intId 
+     */
+    protected function getRootPage($intId)
+    {
+        $intRootId = $this->getParentPage($intId);
+        return $this->Database->prepare("SELECT * FROM tl_page WHERE id=?")->execute($intRootId);
+    }
+
+    /**
+     * Get parent page 
+     * 
+     * @param int $intId
+     * @return object DatabaseResult 
+     */
+    protected function getParentPage($intId)
+    {
+        $objResult = $this->Database->prepare("SELECT id, pid FROM tl_page WHERE id=?")->execute($intId);
+
+        if ($objResult->pid == 0)
+        {
+            return $objResult->id;
+        }
+        else
+        {
+            return $this->getParentPage($objResult->pid);
+        }
+    }
+
+    /**
+     * Create Piwik JS
+     * 
+     * @global object $objPage
+     * @param object $objPage
+     * @param object $objLayout
+     * @param PageRegular $pageRegular
+     * @return void
+     */
+    public function generatePage($objPage, $objLayout, PageRegular $pageRegular)
+    {
+        // Load blacklist for piwik
+        if (strlen($GLOBALS["TL_CONFIG"]['piwik_blacklist']) == 0 || !is_array($arrBlacklist = deserialize($GLOBALS["TL_CONFIG"]['piwik_blacklist'])))
+        {
+            $arrBlacklist = array();
+        }
+
+        // Check if current page is part of the blacklist
+        foreach ($arrBlacklist as $key => $value)
+        {
+            if (stripos($this->Environment->base, $value["url"]) !== FALSE)
+            {
+                // Tracking page disabled
+                $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking for page " . $value["url"] . " disabled -->";
+
+                return;
+            }
+        }
+
+        // Get current page
         global $objPage;
-		
-		$objLayout = $this->getPageLayout($objPage->layout);
-		
-		if($objLayout->piwikEnabled) 
-		{
-			if(!$objLayout->piwikCountAdmins AND $this->Input->Cookie('BE_USER_AUTH'))
-				$jsTag = "<!-- PiwikTrackingTag: Tracking users disabled -->\n";
-			elseif(!$objLayout->piwikCountUsers AND FE_USER_LOGGED_IN)
-				$jsTag = "<!-- PiwikTrackingTag: Tracking members disabled -->\n";
-			else
-			{
-				$url 		= $objLayout->piwikPath;
-				$extensions	= str_replace(' ', '', $objLayout->piwikExtensions);
-			
-				$jsTag  = "<!-- indexer::stop -->\n";
-				$jsTag .= "<script type=\"text/javascript\">\n";
-				$jsTag .= "<!--//--><![CDATA[//><!--\n";
-				$jsTag .= "	document.write(unescape(\"%3Cscript src='" . $url . "piwik.js' type='text/javascript'%3E%3C/script%3E\"));\n";
-				$jsTag .= "	window.addEvent('domready', function() {\n";
-				$jsTag .= "		try {\n";
-				$jsTag .= "			var piwikTracker = Piwik.getTracker(\"" . $url . "piwik.php\", " . $objLayout->piwikSiteID . ");\n";
-				
-				if($objLayout->piwik404 AND $objPage->type == 'error_404')
-					$jsTag .= "			piwikTracker.setDocumentTitle('404/URL = ' + encodeURIComponent(document.location.pathname+document.location.search) + '/From = ' + encodeURIComponent(document.referrer));\n";
-				elseif($objLayout->piwikPageName)
-					$jsTag .= "			piwikTracker.setDocumentTitle(\"" . $objPage->title . "\");\n";
-				
-				if($extensions != '7z,aac,arc,arj,asf,asx,avi,bin,csv,doc,exe,flv,gif,gz,gzip,hqx,jar,jpe,jpeg,js,mp2,mp3,mp4,mpe,mpeg,mov,movie,msi,msp,pdf,phps,png,ppt,qtm,ram,rar,sea,sit,tar,tgz,orrent,txt,wav,wma,wmv,wpd,xls,xml,z,zip')
-				{
-					$extensions = str_replace(',', '|', $extensions);
-				
-					$jsTag .= "			piwikTracker.setDownloadExtensions(\"" . $extensions . "\");\n";
-				}
-				
-				$jsTag .= "			piwikTracker.trackPageView();\n";
-				$jsTag .= "			piwikTracker.enableLinkTracking();\n";
-				$jsTag .= "		} catch( err ) {}\n";
-				$jsTag .= "	});\n";
-				$jsTag .= "//--><!]]>\n";
-				$jsTag .= "</script><noscript><p class=\"invisible\"><img src=\"" . $url . "piwik.php?idsite=" . $objLayout->piwikSiteID . "\" alt=\"\" /></p></noscript>\n";
-				$jsTag .= "<!-- indexer::continue -->\n";
-			}
-			
-			$jsTag .= "</body>";
-				
-			$strContent = str_replace('</body>', $jsTag, $strContent);
-		}
-		
+
+        // Find root page
+        $objRootPage = $this->getRootPage($objPage->id);
+        // Load layout informations
+        $objLayout = $this->getPageLayout($objPage->layout);
+
+        if ($objPage->piwikEnabled)
+        {
+            $objSettings = $objPage;
+        }
+        elseif ($objRootPage->piwikEnabled)
+        {
+            $objSettings = $objRootPage;
+        }
+        elseif ($objLayout != FALSE && $objLayout->piwikEnabled)
+        {
+            $objSettings = $objLayout;
+        }
+        else
+        {
+            return;
+        }
+
+        // Check if user/members should not be counted
+        if (!$objSettings->piwikCountAdmins AND $this->Input->Cookie('BE_USER_AUTH'))
+        {
+            // Tracking users disabled
+            $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking users disabled -->";
+        }
+        elseif (!$objSettings->piwikCountUsers AND FE_USER_LOGGED_IN)
+        {
+            // Tracking members disabled
+            $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking members disabled -->";
+        }
+        else
+        {
+            // Create Piwiki JS
+            $objTemplate = new FrontendTemplate($this->strTemplate);
+            $objTemplate->id = $objSettings->piwikSiteID;
+            $objTemplate->title = $objPage->title;
+            $objTemplate->url = $objSettings->piwikPath;
+            $objTemplate->trimUrl = preg_replace("^(http://|https://)^i", "", $objSettings->piwikPath);
+            $objTemplate->extensions = str_replace(array(' ', ','), array('', '|'), $objSettings->piwikExtensions);
+            $objTemplate->track404 = $objSettings->piwik404 == TRUE && $objPage->type == 'error_404';
+            $objTemplate->trackName = $objSettings->piwikPageName == true;
+
+            $GLOBALS['TL_MOOTOOLS'][] = $objTemplate->parse();
+        }
+
+        return;
+    }
+
+    /**
+     * Check if the address is realy a http or https address and if there is a server with piwik. 
+     * 
+     * @param string $strRegexp
+     * @param string $varValue
+     * @param Widget $objWidget
+     * @return boolean 
+     */
+    public function validatePath($strRegexp, $varValue, Widget $objWidget)
+    {
+        if ($strRegexp == 'piwikPath')
+        {
+            if ($objWidget->value == $varValue)
+            {
+                return true;
+            }
+
+            if (!preg_match('/^[a-zA-Z0-9\.\+\/\?#%:,;\{\}\(\)\[\]@&=~_-]*$/', $varValue))
+            {
+                $objWidget->addError($GLOBALS['TL_LANG']['ERR']['url']);
+
+                return true;
+            }
+
+            $varValue = preg_replace('/\/+$/i', '', $varValue) . '/';
+
+            $objRequest = new Request();
+            $objRequest->send($varValue . 'piwik.js');
+
+            if ($objRequest->hasError())
+            {
+                $objWidget->addError(sprintf($GLOBALS['TL_LANG']['ERR']['piwikPath'], $objRequest->code, $objRequest->error));
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a url contains 'http://' or 'https://'
+     * 
+     * @param string $strRegexp
+     * @param mixed $varValue
+     * @param Widget $objWidget
+     * @return boolean 
+     */
+    public function validateUrl($strRegexp, $varValue, Widget $objWidget)
+    {
+        if ($strRegexp == 'absoluteUrl')
+        {
+            if (!preg_match('/^(http:\/\/|https:\/\/)[a-zA-Z0-9\.\+\/\?#%:,;\{\}\(\)\[\]@&=~_-]*$/', $varValue))
+            {
+                $objWidget->addError($GLOBALS['TL_LANG']['ERR']['url']);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    /**
+     * Check the required extensions and files for syncCto
+     * 
+     * @param string $strContent
+     * @param string $strTemplate
+     * @return string
+     */
+    public function checkExtensions($strContent, $strTemplate)
+    {
+        if ($strTemplate == 'be_main')
+        {
+            if (!is_array($_SESSION["TL_INFO"]))
+            {
+                $_SESSION["TL_INFO"] = array();
+            }
+
+            // required extensions
+            $arrRequiredExtensions = array(
+                'MultiColumnWizard' => 'multicolumnwizard'
+            );
+            
+            // check for required extensions
+            foreach ($arrRequiredExtensions as $key => $val)
+            {
+                if (!in_array($val, $this->Config->getActiveModules()))
+                {
+                    $_SESSION["TL_INFO"] = array_merge($_SESSION["TL_INFO"], array($val => 'Please install the required extension <strong>' . $key . '</strong>'));
+                }
+                else
+                {
+                    if (is_array($_SESSION["TL_INFO"]) && key_exists($val, $_SESSION["TL_INFO"]))
+                    {
+                        unset($_SESSION["TL_INFO"][$val]);
+                    }
+                }
+            }
+        }
+
         return $strContent;
-    }  
-	
-	public function validatePath($strRegexp, $varValue, Widget $objWidget)
-	{
-		if($strRegexp == 'piwikPath')
-		{
-			if (!preg_match('/^[a-zA-Z0-9\.\+\/\?#%:,;\{\}\(\)\[\]@&=~_-]*$/', $varValue))
-			{
-				$objWidget->addError($GLOBALS['TL_LANG']['ERR']['url']);
-			
-				return true;
-			}
-			
-			$varValue = preg_replace('/\/+$/i', '', $varValue) . '/';
-			
-			$objRequest = new Request();
-			$objRequest->send($varValue . 'piwik.js');
-			
-			if($objRequest->hasError())
-			{
-				$objWidget->addError(sprintf($GLOBALS['TL_LANG']['ERR']['piwikPath'], $objRequest->code, $objRequest->error));
-			
-				return true;
-			}
-		}
-		
-		return false;
-	}
+    }
+
 }
 
 ?>

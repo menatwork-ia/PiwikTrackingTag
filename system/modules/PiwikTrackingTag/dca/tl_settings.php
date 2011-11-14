@@ -28,16 +28,28 @@
  */ 
 
 /**
- * Hooks
+ * Add to palette
  */
-$GLOBALS['TL_HOOKS']['generatePage'][] = array('PiwikTrackingTag', 'generatePage');
-$GLOBALS['TL_HOOKS']['addCustomRegexp'][] = array('PiwikTrackingTag', 'validatePath');
-$GLOBALS['TL_HOOKS']['addCustomRegexp'][] = array('PiwikTrackingTag', 'validateUrl');
-$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('PiwikTrackingTag', 'checkExtensions');
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{piwik_legend:hide},piwik_blacklist'; 
 
-/**
- * Download extensions
- */
-$GLOBALS['TL_PIWIK'] = '7z,aac,arc,arj,asf,asx,avi,bin,csv,doc,exe,flv,gif,gz,gzip,hqx,jar,jpe,jpeg,js,mp2,mp3,mp4,mpe,mpeg,mov,movie,msi,msp,pdf,phps,png,ppt,qtm,ram,rar,sea,sit,tar,tgz,orrent,txt,wav,wma,wmv,wpd,xls,xml,z,zip';
+$GLOBALS['TL_DCA']['tl_settings']['fields']['piwik_blacklist'] = array
+(
+	'label' 		=> &$GLOBALS['TL_LANG']['tl_settings']['piwikBlacklist'], 
+	'exclude' 		=> true, 
+	'inputType' 		=> 'multiColumnWizard',
+	'eval' 			=> array
+	(
+		'columnFields' => array
+		(
+			'url' => array
+			(
+				'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['piwikUrl'],
+				'exclude'               => true,
+				'inputType'             => 'text',
+				'eval' 			=> array('style' => 'width:600px', 'rgxp' => 'absoluteUrl')
+			),
+		)
+	)
+);
 
 ?>
