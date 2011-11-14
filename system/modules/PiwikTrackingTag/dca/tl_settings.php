@@ -46,7 +46,7 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['piwik_blacklist'] = array
 				'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['piwikUrl'],
 				'exclude'               => true,
 				'inputType'             => 'text',
-				'eval' 			=> array('style' => 'width:600px', 'rgxp' => 'absoluteUrl')
+				'eval' 			=> array('style' => 'width:600px', 'rgxp' => 'absoluteUrl', 'trailingSlash' => false)
 			),
 		)
 	)
