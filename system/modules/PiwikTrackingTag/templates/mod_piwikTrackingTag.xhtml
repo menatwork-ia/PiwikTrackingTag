@@ -1,6 +1,6 @@
 <!-- indexer::stop -->
 <script type="text/javascript">
-<!--//--><![CDATA[//><!--
+/* <![CDATA[ */
 var pkBaseURL = (("https:" == document.location.protocol) ? "https://<?php echo $this->trimUrl; ?>" : "http://<?php echo $this->trimUrl; ?>");
 document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
@@ -13,7 +13,7 @@ try {
         piwikTracker.trackPageView();
 	piwikTracker.enableLinkTracking();
 } catch( err ) {}
-//--><!]]>
+/* ]]> */
 </script>
 <noscript><p class="invisible"><img src="<?php echo $this->url; ?>piwik.php?idsite=<?php echo $this->id; ?>" alt="" /></p></noscript>
 <!-- indexer::continue -->
