@@ -30,7 +30,7 @@
 /**
  * Add to palette
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{piwik_legend:hide},piwik_blacklist'; 
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{piwik_legend:hide},piwik_blacklist,piwik_ip_blacklist'; 
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['piwik_blacklist'] = array
 (
@@ -51,5 +51,26 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['piwik_blacklist'] = array
 		)
 	)
 );
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['piwik_ip_blacklist'] = array
+(
+	'label' 		=> &$GLOBALS['TL_LANG']['tl_settings']['piwikIpBlacklist'], 
+	'exclude' 		=> true, 
+	'inputType' 		=> 'multiColumnWizard',
+	'eval' 			=> array
+	(
+		'columnFields' => array
+		(
+			'ip' => array
+			(
+				'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['piwikIP'],
+				'exclude'               => true,
+				'inputType'             => 'text',
+				'eval' 			=> array('style' => 'width:600px', 'rgxp' => 'IP')
+			),
+		)
+	)
+);
+
 
 ?>

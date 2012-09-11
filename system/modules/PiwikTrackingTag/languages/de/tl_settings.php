@@ -38,4 +38,7 @@ $GLOBALS['TL_LANG']['tl_settings']['piwik_legend'] = 'Piwik';
 $GLOBALS['TL_LANG']['tl_settings']['piwikBlacklist'] = array('Blackliste für Piwik', 'Hier können Sie eine Liste der URLs pflegen auf denen Piwik nicht eingebunden werden soll.');
 $GLOBALS['TL_LANG']['tl_settings']['piwikUrl'] = array('URL', '');
 
+$GLOBALS['TL_LANG']['tl_settings']['piwikIpBlacklist'] = array('Blackliste für IP Adressen', 'Hier können Sie eine Liste der IPs pflegen bei denen Piwik nicht eingebunden werden soll.');
+$GLOBALS['TL_LANG']['tl_settings']['piwikIP'] = array('IP', '');
+
 ?>

@@ -108,6 +108,23 @@ class PiwikTrackingTag extends Backend
     public function generatePage($objPage, $objLayout, PageRegular $pageRegular)
     {
         // Load blacklist for piwik
+        if (strlen($GLOBALS["TL_CONFIG"]['piwik_ip_blacklist']) == 0 || !is_array($arrIPBlacklist = deserialize($GLOBALS["TL_CONFIG"]['piwik_ip_blacklist'])))
+        {
+            $arrIPBlacklist = array();
+        }
+        
+        // Check if current ip is part of the blacklist
+        foreach ($arrIPBlacklist as $key => $value)
+        {
+            if (stripos($this->Environment->ip, $value["ip"]) !== FALSE)
+            {
+                // Tracking page disabled
+                $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking for current ip disabled -->";
+                return;
+            }
+        }
+
+        // Load blacklist for piwik
         if (strlen($GLOBALS["TL_CONFIG"]['piwik_blacklist']) == 0 || !is_array($arrBlacklist = deserialize($GLOBALS["TL_CONFIG"]['piwik_blacklist'])))
         {
             $arrBlacklist = array();
@@ -241,7 +258,30 @@ class PiwikTrackingTag extends Backend
 
         return false;
     }
-    
+
+    /**
+     * Check if we have a ip
+     * 
+     * @param string $strRegexp
+     * @param mixed $varValue
+     * @param Widget $objWidget
+     * @return boolean 
+     */
+    public function validateIP($strRegexp, $varValue, Widget $objWidget)
+    {            
+        if ($strRegexp == 'IP')
+        {
+            if (!filter_var($varValue, FILTER_VALIDATE_IP))
+            {
+                $objWidget->addError($GLOBALS['TL_LANG']['ERR']['ip']);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Check the required extensions and files for syncCto
      * 

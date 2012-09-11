@@ -33,6 +33,7 @@
 $GLOBALS['TL_HOOKS']['generatePage'][] = array('PiwikTrackingTag', 'generatePage');
 $GLOBALS['TL_HOOKS']['addCustomRegexp'][] = array('PiwikTrackingTag', 'validatePath');
 $GLOBALS['TL_HOOKS']['addCustomRegexp'][] = array('PiwikTrackingTag', 'validateUrl');
+$GLOBALS['TL_HOOKS']['addCustomRegexp'][] = array('PiwikTrackingTag', 'validateIP');
 $GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('PiwikTrackingTag', 'checkExtensions');
 
 /**

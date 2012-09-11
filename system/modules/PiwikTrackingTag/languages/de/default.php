@@ -31,5 +31,6 @@
  * Error messages
  */
 $GLOBALS['TL_LANG']['ERR']['piwikPath'] = 'Die angegeben URL führt nicht zu einer Piwik-Installation (Fehler: %s %s).';
+$GLOBALS['TL_LANG']['ERR']['ip']        = 'Die angegeben IP ist ungültig.';
 
 ?>
