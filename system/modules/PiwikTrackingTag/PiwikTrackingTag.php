@@ -119,7 +119,7 @@ class PiwikTrackingTag extends Backend
             if (stripos($this->Environment->ip, $value["ip"]) !== FALSE)
             {
                 // Tracking page disabled
-                $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking for current ip disabled -->";
+                $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking for IP " . $value["ip"] . " disabled -->";
                 return;
             }
         }
