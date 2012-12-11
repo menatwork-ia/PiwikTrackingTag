@@ -135,14 +135,18 @@ class PiwikTrackingTag extends Backend
         // Check if current page is part of the blacklist
         foreach ($arrBlacklist as $key => $value)
         {
-            if (stripos($this->Environment->base, $value["url"]) !== FALSE)
+            $value["url"] = preg_replace("/^http(s){0,1}:\/\//", '', $value["url"]);
+            $value["url"] = str_replace(array('/'), array('\\/'), $value["url"]);
+            $value["url"] = "http(s){0,1}:\/\/" . $value["url"];
+                       
+            if (preg_match("/^".$value["url"]."/", $this->Environment->base) == true)
             {
                 // Tracking page disabled
                 $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking for page " . $value["url"] . " disabled -->";
-
                 return;
             }
         }
+        
 
         // Get current page
         global $objPage;
