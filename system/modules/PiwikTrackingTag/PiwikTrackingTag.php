@@ -112,11 +112,13 @@ class PiwikTrackingTag extends Backend
         {
             $arrIPBlacklist = array();
         }
-        
+       
         // Check if current ip is part of the blacklist
         foreach ($arrIPBlacklist as $key => $value)
         {
-            if (stripos($this->Environment->ip, $value["ip"]) !== FALSE)
+            $strPattern = str_replace(array('*', '.'), array('([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]){1}', '\.'), $value["ip"]);
+                        
+            if(preg_match("/".$strPattern."/", $this->Environment->ip))
             {
                 // Tracking page disabled
                 $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking for IP " . $value["ip"] . " disabled -->";
@@ -268,15 +270,17 @@ class PiwikTrackingTag extends Backend
      * @return boolean 
      */
     public function validateIP($strRegexp, $varValue, Widget $objWidget)
-    {            
+    {
         if ($strRegexp == 'IP')
         {
-            if (!filter_var($varValue, FILTER_VALIDATE_IP))
-            {
-                $objWidget->addError($GLOBALS['TL_LANG']['ERR']['ip']);
+            $strPreg = "/^(([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]|\*).){3}([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]|\*)$/";
 
+            if (preg_match($strPreg, $varValue))
+            {
                 return true;
             }
+            
+            $objWidget->addError($GLOBALS['TL_LANG']['ERR']['ip']);
         }
 
         return false;
@@ -322,7 +326,6 @@ class PiwikTrackingTag extends Backend
 
         return $strContent;
     }
-
 }
 
 ?>
