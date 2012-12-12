@@ -112,12 +112,18 @@ class PiwikTrackingTag extends Backend
         {
             $arrIPBlacklist = array();
         }
-       
+               
         // Check if current ip is part of the blacklist
         foreach ($arrIPBlacklist as $key => $value)
         {
+            // Check if we have an empty value
+            if(strlen( $value["ip"]) == 0)
+            {
+                continue;
+            }            
+            
             $strPattern = str_replace(array('*', '.'), array('([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]){1}', '\.'), $value["ip"]);
-                        
+            
             if(preg_match("/".$strPattern."/", $this->Environment->ip))
             {
                 // Tracking page disabled
@@ -135,18 +141,24 @@ class PiwikTrackingTag extends Backend
         // Check if current page is part of the blacklist
         foreach ($arrBlacklist as $key => $value)
         {
+            // Check if we have an empty value
+            if(strlen( $value["url"]) == 0)
+            {
+                continue;
+            }  
+            
             $value["url"] = preg_replace("/^http(s){0,1}:\/\//", '', $value["url"]);
+            $strReadable = $value["url"];
             $value["url"] = str_replace(array('/'), array('\\/'), $value["url"]);
             $value["url"] = "http(s){0,1}:\/\/" . $value["url"];
                        
             if (preg_match("/^".$value["url"]."/", $this->Environment->base) == true)
             {
                 // Tracking page disabled
-                $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking for page " . $value["url"] . " disabled -->";
+                $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking for page http(s)://" . $strReadable . " disabled -->";
                 return;
             }
         }
-        
 
         // Get current page
         global $objPage;
