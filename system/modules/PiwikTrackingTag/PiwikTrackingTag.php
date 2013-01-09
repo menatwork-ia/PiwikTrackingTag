@@ -149,7 +149,7 @@ class PiwikTrackingTag extends Backend
             
             $value["url"] = preg_replace("/^http(s){0,1}:\/\//", '', $value["url"]);
             $strReadable = $value["url"];
-            $value["url"] = str_replace(array('/'), array('\\/'), $value["url"]);
+            $value["url"] = str_replace(array('/', '*'), array('\\/', '.*'), $value["url"]);
             $value["url"] = "http(s){0,1}:\/\/" . $value["url"];
                        
             if (preg_match("/^".$value["url"]."/", $this->Environment->base) == true)
@@ -266,10 +266,9 @@ class PiwikTrackingTag extends Backend
     {
         if ($strRegexp == 'absoluteUrl')
         {
-            if (!preg_match('/^(http:\/\/|https:\/\/)[a-zA-Z0-9\.\+\/\?#%:,;\{\}\(\)\[\]@&=~_-]*$/', $varValue))
+            if (!preg_match('/^(http:\/\/|https:\/\/)[a-zA-Z0-9\.\+\/\?\*#%:,;\{\}\(\)\[\]@&=~_-]*$/', $varValue))
             {
                 $objWidget->addError($GLOBALS['TL_LANG']['ERR']['url']);
-
                 return true;
             }
         }
