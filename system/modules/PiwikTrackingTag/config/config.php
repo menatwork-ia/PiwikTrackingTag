@@ -4,7 +4,7 @@
  * Contao Open Source CMS
  *
  * @copyright  MEN AT WORK 2013 
- * @package    PiwikTrackingCode
+ * @package    PiwikTrackingTag
  * @license    GNU/LGPL
  * @filesource
  */
