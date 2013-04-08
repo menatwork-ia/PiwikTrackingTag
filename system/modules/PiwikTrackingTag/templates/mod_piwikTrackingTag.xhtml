@@ -10,8 +10,12 @@ try {
         <?php if($this->track404 == true): ?>piwikTracker.setDocumentTitle('404/URL = ' + encodeURIComponent(document.location.pathname+document.location.search) + '/From = ' + encodeURIComponent(document.referrer));<?php endif; ?>
         <?php if($this->trackName): ?>piwikTracker.setDocumentTitle("<?php echo $this->title; ?>");<?php endif; ?>    
         piwikTracker.setDownloadExtensions("<?php echo $this->extensions; ?>");        
-        piwikTracker.trackPageView();
-	piwikTracker.enableLinkTracking();
+        <?php if($this->isSearch): ?>
+        piwikTracker.trackSiteSearch('<?php echo $this->searchWords; ?>', false, false);   
+        <?php else: ?>
+        piwikTracker.trackPageView();   
+        <?php endif; ?>
+        piwikTracker.enableLinkTracking();
 } catch( err ) {}
 /* ]]> */
 </script>
