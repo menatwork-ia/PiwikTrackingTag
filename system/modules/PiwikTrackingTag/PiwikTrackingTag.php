@@ -189,6 +189,22 @@ class PiwikTrackingTag extends Backend
             $objTemplate->extensions = str_replace(array(' ', ','), array('', '|'), $objSettings->piwikExtensions);
             $objTemplate->track404 = $objSettings->piwik404 == TRUE && $objPage->type == 'error_404';
             $objTemplate->trackName = $objSettings->piwikPageName == true;
+            
+            // Add some values for the search
+            $strKeywords = $this->Input->get('keywords');
+            if(strlen($strKeywords) != 0)
+            {
+                // If query type 'and' use spaces if 'or' use comma
+                $strReplace = ($this->Input->get('query_type') == 'and' || $this->Input->get('query_type') == '') ? ' ' : ',';
+                
+                $objTemplate->isSearch = true;
+                $objTemplate->searchWords = str_replace(array(' ', '\'', '"'), array($strReplace, '', ''), $this->Input->get('keywords'));
+            }
+            else
+            {
+                 $objTemplate->isSearch = false;
+                 $objTemplate->searchWords = '';
+            }
 
             $GLOBALS['TL_MOOTOOLS'][] = $objTemplate->parse();
         }
