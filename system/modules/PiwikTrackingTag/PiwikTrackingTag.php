@@ -66,9 +66,9 @@ class PiwikTrackingTag extends Backend
      */
     protected function getParentPage($intId)
     {
-        $objResult = $this->Database->prepare("SELECT id, pid FROM tl_page WHERE id=?")->execute($intId);
+        $objResult = $this->Database->prepare("SELECT id, pid, type FROM tl_page WHERE id=?")->execute($intId);
 
-        if ($objResult->pid == 0)
+        if ($objResult->pid == 0 || $objResult->type == 'root')
         {
             return $objResult->id;
         }
