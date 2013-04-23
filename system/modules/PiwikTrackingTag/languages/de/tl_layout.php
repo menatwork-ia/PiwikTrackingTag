@@ -25,5 +25,6 @@ $GLOBALS['TL_LANG']['tl_layout']['piwikSiteID'] = array('Seiten-ID', 'Die ID der
 $GLOBALS['TL_LANG']['tl_layout']['piwikPageName'] = array('Seiten-Titel verwenden', 'Lassen Sie sich in der Piwik-Statstik den Seiten-Titel anstatt des Alias anzeigen.');
 $GLOBALS['TL_LANG']['tl_layout']['piwik404'] = array('404 Seiten gesondert anzeigen', 'Sie haben die Möglichkeit Verweise auf nicht gefundene Seiten (Seitentyp: <em>404 Seite nicht gefunden</em>) sich in der Piwik-Statistik mit den Verweisen auf diese Seiten gesondert anzeigen zu lassen. So können Sie "tote Links" auf Ihrer Website leichter ausfindig zu machen.');
 $GLOBALS['TL_LANG']['tl_layout']['piwikExtensions'] = array('Dateiendungen für Download-Liste', 'Hier können Sie die kommagetrennte Liste der Dateiendungen anpassen, die in der Piwik-Statistik als Download gewertet werden. Lassen Sie das Feld leer, um die Standard-Endungen wieder herzustellen.');
-
+$GLOBALS['TL_LANG']['tl_layout']['piwikVisitorCookieTimeout'] = array('Besucher-Cookie Timeout', 'Hier können Sie Lebenszeit des Besucher-Cookies in Sekunden einstellen. 0 bedeutet, dass der default Wert von Piwik verwendet wird (2 Jahre).');
+$GLOBALS['TL_LANG']['tl_layout']['piwikDownloadClasses'] = array('Download Klassen', 'Hier können Sie die kommagetrennte Liste der Klassen angeben, die Piwik als Download-Klasse verwenden soll. Ist dieses Feld leer wird der default Wert verwendet ("piwik_download").');
 ?>

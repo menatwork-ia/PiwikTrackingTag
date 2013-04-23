@@ -189,7 +189,10 @@ class PiwikTrackingTag extends Backend
             $objTemplate->extensions = str_replace(array(' ', ','), array('', '|'), $objSettings->piwikExtensions);
             $objTemplate->track404 = $objSettings->piwik404 == TRUE && $objPage->type == 'error_404';
             $objTemplate->trackName = $objSettings->piwikPageName == true;
-            
+            $objTemplate->visitorCookieTimeout = $objSettings->piwikVisitorCookieTimeout;
+            $objTemplate->setVisitorCookieTimeout = ($objSettings->piwikVisitorCookieTimeout >0)? true : false;
+            $objTemplate->downloadClasses = trimsplit(',', $objSettings->piwikDownloadClasses);
+
             // Add some values for the search
             $strKeywords = $this->Input->get('keywords');
             if(strlen($strKeywords) != 0)

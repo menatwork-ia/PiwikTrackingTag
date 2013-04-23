@@ -18,7 +18,7 @@ $GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'piwikEnabled';
 /**
  * Subpalettes
  */
-$GLOBALS['TL_DCA']['tl_page']['subpalettes']['piwikEnabled'] = 'piwikPath,piwikSiteID,piwikExtensions,piwikCountAdmins,piwikCountUsers,piwikPageName,piwik404';
+$GLOBALS['TL_DCA']['tl_page']['subpalettes']['piwikEnabled'] = 'piwikPath,piwikSiteID,piwikVisitorCookieTimeout,piwikDownloadClasses,piwikExtensions,piwikCountAdmins,piwikCountUsers,piwikPageName,piwik404';
 
 /**
  * Fields
@@ -81,6 +81,18 @@ $GLOBALS['TL_DCA']['tl_page']['fields'] = array_merge(
 			'exclude' => true,
 			'eval' => array('tl_class' => 'w50')
 		),
+		'piwikVisitorCookieTimeout' => array(
+			'label' => &$GLOBALS['TL_LANG']['tl_page']['piwikVisitorCookieTimeout'],
+			'inputType' => 'text',
+			'exclude' => true,
+			'eval' => array('rgxp' => 'digit', 'tl_class' => 'w50')
+		),
+		'piwikDownloadClasses' => array(
+			'label' => &$GLOBALS['TL_LANG']['tl_page']['piwikDownloadClasses'],
+			'inputType' => 'text',
+			'exclude' => true,
+			'eval' => array('tl_class' => 'w50')
+		)        
 	)
 );
 
