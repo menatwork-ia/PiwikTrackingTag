@@ -37,7 +37,7 @@ foreach($GLOBALS['TL_DCA']['tl_layout']['palettes'] as $k => $v)
 /**
  * Subpalettes
  */
-$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['piwikEnabled'] = 'piwikPath,piwikSiteID,piwikExtensions,piwikCountAdmins,piwikCountUsers,piwikPageName,piwik404';
+$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['piwikEnabled'] = 'piwikPath,piwikSiteID,piwikVisitorCookieTimeout,piwikDownloadClasses,piwikExtensions,piwikCountAdmins,piwikCountUsers,piwikPageName,piwik404';
 
 
 /**
@@ -103,6 +103,18 @@ $GLOBALS['TL_DCA']['tl_layout']['fields'] = array_merge(
 			'exclude' => true,
 			'eval' => array('tl_class' => 'w50')
 		),
+        'piwikVisitorCookieTimeout' => array(
+			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikVisitorCookieTimeout'],
+			'inputType' => 'text',
+			'exclude' => true,
+			'eval' => array('rgxp' => 'digit', 'tl_class' => 'w50')
+		),
+		'piwikDownloadClasses' => array(
+			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikDownloadClasses'],
+			'inputType' => 'text',
+			'exclude' => true,
+			'eval' => array('tl_class' => 'w50')
+		)
 	)
 );
 

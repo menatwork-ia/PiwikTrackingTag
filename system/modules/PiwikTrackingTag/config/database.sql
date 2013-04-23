@@ -20,7 +20,9 @@ CREATE TABLE `tl_layout` (
   `piwikCountUsers` char(1) NOT NULL default '1',
   `piwikPageName` char(1) NOT NULL default '0',
   `piwik404` char(1) NOT NULL default '0',
-  `piwikExtensions` text NULL
+  `piwikExtensions` text NULL,
+  `piwikVisitorCookieTimeout` int(10) unsigned NOT NULL default '0',
+  `piwikDownloadClasses` varchar(255) NOT NULL default '',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -38,5 +40,7 @@ CREATE TABLE `tl_page` (
   `piwikCountUsers` char(1) NOT NULL default '1',
   `piwikPageName` char(1) NOT NULL default '0',
   `piwik404` char(1) NOT NULL default '0',
-  `piwikExtensions` text NULL
+  `piwikExtensions` text NULL,
+  `piwikVisitorCookieTimeout` int(10) unsigned NOT NULL default '0',
+  `piwikDownloadClasses` varchar(255) NOT NULL default '',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
