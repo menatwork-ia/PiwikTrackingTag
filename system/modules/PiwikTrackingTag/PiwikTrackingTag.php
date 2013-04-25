@@ -191,7 +191,8 @@ class PiwikTrackingTag extends Backend
             $objTemplate->trackName = $objSettings->piwikPageName == true;
             $objTemplate->visitorCookieTimeout = $objSettings->piwikVisitorCookieTimeout;
             $objTemplate->setVisitorCookieTimeout = ($objSettings->piwikVisitorCookieTimeout >0)? true : false;
-            $objTemplate->downloadClasses = trimsplit(',', $objSettings->piwikDownloadClasses);
+            $arrDownloadClasses = trimsplit(',', $objSettings->piwikDownloadClasses);
+            $objTemplate->downloadClasses = "'".implode("','", $arrDownloadClasses)."'";
 
             // Add some values for the search
             $strKeywords = $this->Input->get('keywords');
