@@ -1,4 +1,3 @@
-<!-- indexer::stop -->
 <script type="text/javascript">
 /* <![CDATA[ */
 var _paq = _paq || [];
@@ -20,7 +19,7 @@ _paq.push(["trackPageView"]);
 _paq.push(["enableLinkTracking"]);
 try {
   (function() {
-    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://<?php echo $this->trimUrl; ?>/";
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://<?php echo $this->trimUrl; ?>";
     _paq.push(["setTrackerUrl", u+"piwik.php"]);
     _paq.push(["setSiteId", "<?php echo $this->id; ?>"]);
     var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
@@ -29,5 +28,4 @@ try {
 }catch( err ) {}
 /* ]]> */
 </script>
-<noscript><p class="invisible"><?php if (preg_match('/bot|crawl|slurp|spider/i', $_SERVER['HTTP_USER_AGENT'])): /*do nothing*/ else :?><img src="<?php echo $this->url; ?>piwik.php?idsite=<?php echo $this->id; ?>&amp;rec=1" alt="" /><?php endif;?></p></noscript>
-<!-- indexer::continue -->
+<noscript><p class="invisible"><?php if (preg_match('/bot|crawl|slurp|spider/i', $_SERVER['HTTP_USER_AGENT'])): /*do nothing*/ else: ?><img src="<?php echo $this->url; ?>piwik.php?idsite=<?php echo $this->id; ?>&amp;rec=1" alt="" /><?php endif;?></p></noscript>
