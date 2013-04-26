@@ -1,5 +1,4 @@
-<!-- indexer::stop -->
-<script type="text/javascript">
+<script>
 var _paq = _paq || [];
 <?php if($this->track404 == true): ?>
 _paq.push(['setDocumentTitle', '404/URL = ' + encodeURIComponent(document.location.pathname+document.location.search) + '/From = ' + encodeURIComponent(document.referrer)]);
@@ -27,5 +26,4 @@ try {
   })();    
 }catch( err ) {}
 </script>
-<noscript><p class="invisible"><?php if (preg_match('/bot|crawl|slurp|spider/i', $_SERVER['HTTP_USER_AGENT'])): /*do nothing*/ else :?><img src="<?php echo $this->url; ?>piwik.php?idsite=<?php echo $this->id; ?>&amp;rec=1" alt="" /><?php endif;?></p></noscript>
-<!-- indexer::continue -->
+<noscript><p class="invisible"><?php if (preg_match('/bot|crawl|slurp|spider/i', $_SERVER['HTTP_USER_AGENT'])): /*do nothing*/ else: ?><img src="<?php echo $this->url; ?>piwik.php?idsite=<?php echo $this->id; ?>&amp;rec=1" alt="" /><?php endif;?></p></noscript>
