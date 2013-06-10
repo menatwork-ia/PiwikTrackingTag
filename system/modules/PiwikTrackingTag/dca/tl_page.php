@@ -18,7 +18,7 @@ $GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'piwikEnabled';
 /**
  * Subpalettes
  */
-$GLOBALS['TL_DCA']['tl_page']['subpalettes']['piwikEnabled'] = 'piwikPath,piwikSiteID,piwikVisitorCookieTimeout,piwikDownloadClasses,piwikExtensions,piwikCountAdmins,piwikCountUsers,piwikPageName,piwik404';
+$GLOBALS['TL_DCA']['tl_page']['subpalettes']['piwikEnabled'] = 'piwikPath,piwikSiteID,piwikTemplate,piwikVisitorCookieTimeout,piwikDownloadClasses,piwikExtensions,piwikCountAdmins,piwikCountUsers,piwikPageName,piwik404';
 
 /**
  * Fields
@@ -42,6 +42,14 @@ $GLOBALS['TL_DCA']['tl_page']['fields'] = array_merge(
 			'inputType' => 'text',
 			'exclude' => true,
 			'eval' => array('mandatory' => true, 'rgxp' => 'digit', 'tl_class' => 'w50', 'maxlength' => 4)
+		),
+		'piwikTemplate' => array(
+			'label' => &$GLOBALS['TL_LANG']['tl_page']['piwikTemplate'],
+			'inputType' => 'select',
+			'exclude' => true,
+			'options_callback' => array('PiwikTrackingTag', 'findPiwikTemplates'),
+			'load_callback' => array(array('PiwikTrackingTag', 'setDefaultValue')),
+			'eval' => array('mandatory' => true, 'tl_class' => 'w50', 'chosen'=> true, 'alwaysSave' => true)
 		),
 		'piwikExtensions' => array(
 			'label' => &$GLOBALS['TL_LANG']['tl_page']['piwikExtensions'],
@@ -92,13 +100,12 @@ $GLOBALS['TL_DCA']['tl_page']['fields'] = array_merge(
 			'inputType' => 'text',
 			'exclude' => true,
 			'eval' => array('tl_class' => 'w50')
-		)        
+		)
 	)
 );
 
 class tl_page_PiwikTrackingTag extends Backend
 {
-
     public function extensions($value)
     {
         if (trim($value) == '')

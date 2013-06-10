@@ -14,9 +14,69 @@
  */
 class PiwikTrackingTag extends Backend
 {
-
     // Template name
-    protected $strTemplate = 'mod_piwikTrackingTag';
+    protected $strTemplate = 'mod_piwikTrackingTagSynchron';
+
+    /**
+     * Get a list with all piwik templates.
+     * 
+     * @return array
+     */   
+    public function findPiwikTemplates($objDC, $blnOneDimension = false)
+    {
+        $arrReturn = array();
+
+        // Get all templates
+        $arrTeplates = $this->getTemplateGroup('mod_piwik');
+
+        // Get path
+        foreach ($arrTeplates as $key => $value)
+        {
+            // Clean up
+            $mixPath = $this->getTemplate($value);
+
+            // Remove TL_ROOT
+            $mixPath = str_replace(array(TL_ROOT), '', $mixPath);
+            // Remove system/modules and co from path
+            if (stripos($mixPath, 'system/modules') !== false)
+            {
+                $mixPath = str_replace(array('system/modules', 'templates'), '', $mixPath);
+            }
+
+            $mixPath = explode('/', $mixPath);
+            array_pop($mixPath);
+            $mixPath = implode("/", array_filter($mixPath));
+
+            if ($blnOneDimension)
+            {
+                $arrReturn[$value] = $value;
+            }
+            else
+            {
+                $arrReturn[$mixPath][$value] = $value;
+            }
+        }
+
+        return $arrReturn;
+    }
+
+    /**
+     * If we have no value set the 'mod_piwikTrackingTagSynchron' as default.
+     * 
+     * @param mixed $arrValue
+     * @param object $objDC
+     * 
+     * @return mixed
+     */
+    public function setDefaultValue($arrValue, $objDC)
+    {
+        if (empty($arrValue))
+        {
+            return 'mod_piwikTrackingTagSynchron';
+        }
+
+        return $arrValue;
+    }
 
     /**
      * Get a page layout and return it as database result object.
@@ -94,7 +154,7 @@ class PiwikTrackingTag extends Backend
         {
             $arrIPBlacklist = array();
         }
-               
+
         // Check if current ip is part of the blacklist
         foreach ($arrIPBlacklist as $key => $value)
         {
@@ -102,10 +162,10 @@ class PiwikTrackingTag extends Backend
             if(strlen( $value["ip"]) == 0)
             {
                 continue;
-            }            
-            
+            }
+
             $strPattern = str_replace(array('*', '.'), array('([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]){1}', '\.'), $value["ip"]);
-            
+
             if(preg_match("/".$strPattern."/", $this->Environment->ip))
             {
                 // Tracking page disabled
@@ -128,12 +188,12 @@ class PiwikTrackingTag extends Backend
             {
                 continue;
             }  
-            
+
             $value["url"] = preg_replace("/^http(s){0,1}:\/\//", '', $value["url"]);
             $strReadable = $value["url"];
             $value["url"] = str_replace(array('/', '*'), array('\\/', '.*'), $value["url"]);
             $value["url"] = "http(s){0,1}:\/\/" . $value["url"];
-                       
+
             if (preg_match("/^".$value["url"]."/", $this->Environment->base) == true)
             {
                 // Tracking page disabled
@@ -153,14 +213,17 @@ class PiwikTrackingTag extends Backend
         if ($objPage->piwikEnabled)
         {
             $objSettings = $objPage;
+            $this->setCurrentTemplate($objPage->piwikTemplate);
         }
         elseif ($objRootPage->piwikEnabled)
         {
             $objSettings = $objRootPage;
+            $this->setCurrentTemplate($objRootPage->piwikTemplate);
         }
         elseif ($objLayout != FALSE && $objLayout->piwikEnabled)
         {
             $objSettings = $objLayout;
+            $this->setCurrentTemplate($objLayout->piwikTemplate);
         }
         else
         {
@@ -214,6 +277,36 @@ class PiwikTrackingTag extends Backend
         }
 
         return;
+    }
+    
+    /**
+     * Check if we have a valid value and if the template exist.
+     * 
+     * @param string $strTemplate
+     */
+    protected function setCurrentTemplate($strTemplate)
+    {
+        // Load all templates
+        $arrTemplates = $this->findPiwikTemplates(null, true);
+        
+        // Check if we have a valid value
+        if (!empty($strTemplate) && in_array($strTemplate, $arrTemplates))
+        {
+            $this->strTemplate = $strTemplate;
+            return;
+        }
+
+        // Check if we have another in the theme template folder
+        $arrTemplates = $this->findPiwikTemplates(null, false);
+        
+        // If we have no value and a theme template use it
+        if (empty($strTemplate) && key_exists('templates', $arrTemplates))
+        {
+            $this->strTemplate = array_shift($arrTemplates['templates']);
+            return;
+        }
+        
+        $this->strTemplate = 'mod_piwikTrackingTagSynchron';
     }
 
     /**
