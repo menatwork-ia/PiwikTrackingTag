@@ -24,6 +24,7 @@ $GLOBALS['TL_LANG']['tl_layout']['piwikPath'] = array('URL of the Piwik installa
 $GLOBALS['TL_LANG']['tl_layout']['piwikSiteID'] = array('Site ID', 'The ID of the site that was created in Piwik.');
 $GLOBALS['TL_LANG']['tl_layout']['piwikPageName'] = array('Use page title', 'Use the page title instead of the alias in the statistic.');
 $GLOBALS['TL_LANG']['tl_layout']['piwik404'] = array('Show reference to <em>404 Page not found</em> seperate', 'You have the possibility to show references to <em>404 Page not found</em> in the piwik statistic seperate. So you can find "dead links" easier.');
+$GLOBALS['TL_LANG']['tl_layout']['piwikTemplate'] = array('Template', 'Here you can select the piwik template. Important: Please note that the asynchronous template is supported from piwik version 1.12.');
 
 
 ?>
