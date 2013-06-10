@@ -1,3 +1,4 @@
+<!-- indexer::stop -->
 <script type="text/javascript">
 /* <![CDATA[ */
 var _paq = _paq || [];
@@ -29,3 +30,4 @@ try {
 /* ]]> */
 </script>
 <noscript><p class="invisible"><?php if (preg_match('/bot|crawl|slurp|spider/i', $_SERVER['HTTP_USER_AGENT'])): /*do nothing*/ else: ?><img src="<?php echo $this->url; ?>piwik.php?idsite=<?php echo $this->id; ?>&amp;rec=1" alt="" /><?php endif;?></p></noscript>
+<!-- indexer::continue -->

@@ -21,7 +21,7 @@ class PiwikTrackingTag extends Backend
      * Get a list with all piwik templates.
      * 
      * @return array
-     */   
+     */
     public function findPiwikTemplates($objDC, $blnOneDimension = false)
     {
         $arrReturn = array();
@@ -254,8 +254,11 @@ class PiwikTrackingTag extends Backend
             $objTemplate->trackName = $objSettings->piwikPageName == true;
             $objTemplate->visitorCookieTimeout = $objSettings->piwikVisitorCookieTimeout;
             $objTemplate->setVisitorCookieTimeout = ($objSettings->piwikVisitorCookieTimeout >0)? true : false;
-            $arrDownloadClasses = trimsplit(',', $objSettings->piwikDownloadClasses);
-            $objTemplate->downloadClasses = "'".implode("','", $arrDownloadClasses)."'";
+            if($objSettings->piwikDownloadClasses)
+            {
+                $arrDownloadClasses = trimsplit(',', $objSettings->piwikDownloadClasses);
+                $objTemplate->downloadClasses = "'".implode("','", $arrDownloadClasses)."'";
+            }
 
             // Add some values for the search
             $strKeywords = $this->Input->get('keywords');
