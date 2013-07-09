@@ -1,9 +1,9 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
  *
- * @copyright  MEN AT WORK 2013 
+ * @copyright  MEN AT WORK 2013
  * @package    PiwikTrackingTag
  * @license    GNU/LGPL
  * @filesource
@@ -17,9 +17,24 @@ class PiwikTrackingTag extends Backend
     // Template name
     protected $strTemplate = 'mod_piwikTrackingTagSynchron';
 
+    protected $strScriptType = 'TL_MOOTOOLS';
+
+    /**
+    * Load the database object
+    */
+    public function __construct()
+    {
+        if (version_compare(VERSION, 3, '>='))
+        {
+            $this->strScriptType = 'TL_BODY';
+        }
+
+        parent::__construct();
+    }
+
     /**
      * Get a list with all piwik templates.
-     * 
+     *
      * @return array
      */
     public function findPiwikTemplates($objDC, $blnOneDimension = false)
@@ -62,10 +77,10 @@ class PiwikTrackingTag extends Backend
 
     /**
      * If we have no value set the 'mod_piwikTrackingTagSynchron' as default.
-     * 
+     *
      * @param mixed $arrValue
      * @param object $objDC
-     * 
+     *
      * @return mixed
      */
     public function setDefaultValue($arrValue, $objDC)
@@ -81,7 +96,7 @@ class PiwikTrackingTag extends Backend
     /**
      * Get a page layout and return it as database result object.
      * This is a copy from PageRegular, see comments in parseFrontendTemplate() below for the reason why this is here.
-     * 
+     *
      * @param integer
      * @return object
      */
@@ -109,8 +124,8 @@ class PiwikTrackingTag extends Backend
 
     /**
      * Find the root page
-     * 
-     * @param int $intId 
+     *
+     * @param int $intId
      */
     protected function getRootPage($intId)
     {
@@ -119,10 +134,10 @@ class PiwikTrackingTag extends Backend
     }
 
     /**
-     * Get parent page 
-     * 
+     * Get parent page
+     *
      * @param int $intId
-     * @return object DatabaseResult 
+     * @return object DatabaseResult
      */
     protected function getParentPage($intId)
     {
@@ -140,7 +155,7 @@ class PiwikTrackingTag extends Backend
 
     /**
      * Create Piwik JS
-     * 
+     *
      * @global object $objPage
      * @param object $objPage
      * @param object $objLayout
@@ -169,7 +184,7 @@ class PiwikTrackingTag extends Backend
             if(preg_match("/".$strPattern."/", $this->Environment->ip))
             {
                 // Tracking page disabled
-                $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking for IP " . $value["ip"] . " disabled -->";
+                $GLOBALS[$this->strScriptType][] = "<!-- PiwikTrackingTag: Tracking for IP " . $value["ip"] . " disabled -->";
                 return;
             }
         }
@@ -187,7 +202,7 @@ class PiwikTrackingTag extends Backend
             if(strlen( $value["url"]) == 0)
             {
                 continue;
-            }  
+            }
 
             $value["url"] = preg_replace("/^http(s){0,1}:\/\//", '', $value["url"]);
             $strReadable = $value["url"];
@@ -197,7 +212,7 @@ class PiwikTrackingTag extends Backend
             if (preg_match("/^".$value["url"]."/", $this->Environment->base) == true)
             {
                 // Tracking page disabled
-                $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking for page http(s)://" . $strReadable . " disabled -->";
+                $GLOBALS[$this->strScriptType][] = "<!-- PiwikTrackingTag: Tracking for page http(s)://" . $strReadable . " disabled -->";
                 return;
             }
         }
@@ -234,12 +249,12 @@ class PiwikTrackingTag extends Backend
         if (!$objSettings->piwikCountAdmins AND $this->Input->Cookie('BE_USER_AUTH'))
         {
             // Tracking users disabled
-            $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking users disabled -->";
+            $GLOBALS[$this->strScriptType][] = "<!-- PiwikTrackingTag: Tracking users disabled -->";
         }
         elseif (!$objSettings->piwikCountUsers AND FE_USER_LOGGED_IN)
         {
             // Tracking members disabled
-            $GLOBALS['TL_MOOTOOLS'][] = "<!-- PiwikTrackingTag: Tracking members disabled -->";
+            $GLOBALS[$this->strScriptType][] = "<!-- PiwikTrackingTag: Tracking members disabled -->";
         }
         else
         {
@@ -266,7 +281,7 @@ class PiwikTrackingTag extends Backend
             {
                 // If query type 'and' use spaces if 'or' use comma
                 $strReplace = ($this->Input->get('query_type') == 'and' || $this->Input->get('query_type') == '') ? ' ' : ',';
-                
+
                 $objTemplate->isSearch = true;
                 $objTemplate->searchWords = str_replace(array(' ', '\'', '"'), array($strReplace, '', ''), $this->Input->get('keywords'));
             }
@@ -276,22 +291,22 @@ class PiwikTrackingTag extends Backend
                  $objTemplate->searchWords = '';
             }
 
-            $GLOBALS['TL_MOOTOOLS'][] = $objTemplate->parse();
+            $GLOBALS[$this->strScriptType][] = $objTemplate->parse();
         }
 
         return;
     }
-    
+
     /**
      * Check if we have a valid value and if the template exist.
-     * 
+     *
      * @param string $strTemplate
      */
     protected function setCurrentTemplate($strTemplate)
     {
         // Load all templates
         $arrTemplates = $this->findPiwikTemplates(null, true);
-        
+
         // Check if we have a valid value
         if (!empty($strTemplate) && in_array($strTemplate, $arrTemplates))
         {
@@ -301,24 +316,24 @@ class PiwikTrackingTag extends Backend
 
         // Check if we have another in the theme template folder
         $arrTemplates = $this->findPiwikTemplates(null, false);
-        
+
         // If we have no value and a theme template use it
         if (empty($strTemplate) && key_exists('templates', $arrTemplates))
         {
             $this->strTemplate = array_shift($arrTemplates['templates']);
             return;
         }
-        
+
         $this->strTemplate = 'mod_piwikTrackingTagSynchron';
     }
 
     /**
-     * Check if the address is realy a http or https address and if there is a server with piwik. 
-     * 
+     * Check if the address is realy a http or https address and if there is a server with piwik.
+     *
      * @param string $strRegexp
      * @param string $varValue
      * @param Widget $objWidget
-     * @return boolean 
+     * @return boolean
      */
     public function validatePath($strRegexp, $varValue, Widget $objWidget)
     {
@@ -354,11 +369,11 @@ class PiwikTrackingTag extends Backend
 
     /**
      * Check if a url contains 'http://' or 'https://'
-     * 
+     *
      * @param string $strRegexp
      * @param mixed $varValue
      * @param Widget $objWidget
-     * @return boolean 
+     * @return boolean
      */
     public function validateUrl($strRegexp, $varValue, Widget $objWidget)
     {
@@ -376,11 +391,11 @@ class PiwikTrackingTag extends Backend
 
     /**
      * Check if we have a ip
-     * 
+     *
      * @param string $strRegexp
      * @param mixed $varValue
      * @param Widget $objWidget
-     * @return boolean 
+     * @return boolean
      */
     public function validateIP($strRegexp, $varValue, Widget $objWidget)
     {
@@ -392,7 +407,7 @@ class PiwikTrackingTag extends Backend
             {
                 return true;
             }
-            
+
             $objWidget->addError($GLOBALS['TL_LANG']['ERR']['ip']);
         }
 
@@ -401,7 +416,7 @@ class PiwikTrackingTag extends Backend
 
     /**
      * Check the required extensions and files for syncCto
-     * 
+     *
      * @param string $strContent
      * @param string $strTemplate
      * @return string
@@ -419,7 +434,7 @@ class PiwikTrackingTag extends Backend
             $arrRequiredExtensions = array(
                 'MultiColumnWizard' => 'multicolumnwizard'
             );
-            
+
             // check for required extensions
             foreach ($arrRequiredExtensions as $key => $val)
             {
@@ -440,5 +455,3 @@ class PiwikTrackingTag extends Backend
         return $strContent;
     }
 }
-
-?>

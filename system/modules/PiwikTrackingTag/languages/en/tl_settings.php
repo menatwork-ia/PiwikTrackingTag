@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -19,5 +19,3 @@ $GLOBALS['TL_LANG']['tl_settings']['piwik_legend'] = 'Piwik';
  */
 $GLOBALS['TL_LANG']['tl_settings']['piwikBlacklist'] = array('Piwik blacklist', 'Here you can maintain a list of URLs where Piwik is not to be involved.');
 $GLOBALS['TL_LANG']['tl_settings']['piwikUrl'] = array('URL', '');
-
-?>

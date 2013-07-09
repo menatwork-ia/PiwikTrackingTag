@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -14,5 +14,3 @@
  */
 $GLOBALS['TL_LANG']['ERR']['piwikPath'] = 'Die angegeben URL führt nicht zu einer Piwik-Installation (Fehler: %s %s).';
 $GLOBALS['TL_LANG']['ERR']['ip']        = 'Die angegebenen IP-Adressen sind ungültig. Bitte benutzen Sie nur Zahlen (0-255) oder * als Platzhalter.';
-
-?>

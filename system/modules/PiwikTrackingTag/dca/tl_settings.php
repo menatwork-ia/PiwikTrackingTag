@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -16,19 +16,23 @@ $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{piwik_legend:hide
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['piwik_blacklist'] = array
 (
-	'label' 		=> &$GLOBALS['TL_LANG']['tl_settings']['piwikBlacklist'], 
-	'exclude' 		=> true, 
-	'inputType' 		=> 'multiColumnWizard',
-	'eval' 			=> array
+	'label'                         => &$GLOBALS['TL_LANG']['tl_settings']['piwikBlacklist'], 
+	'exclude'                       => true, 
+	'inputType'                     => 'multiColumnWizard',
+	'eval'                          => array
 	(
-		'columnFields' => array
+		'columnFields'              => array
 		(
-			'url' => array
+			'url'                   => array
 			(
-				'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['piwikUrl'],
-				'exclude'               => true,
-				'inputType'             => 'text',
-				'eval'                  => array('style' => 'width:600px', 'rgxp' => 'absoluteUrl', 'trailingSlash' => false)
+				'label'             => &$GLOBALS['TL_LANG']['tl_settings']['piwikUrl'],
+				'inputType'         => 'text',
+				'eval'              => array
+				(
+					'style'         => 'width:600px',
+					'rgxp'          => 'absoluteUrl',
+					'trailingSlash' => false
+				)
 			),
 		)
 	)
@@ -36,23 +40,23 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['piwik_blacklist'] = array
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['piwik_ip_blacklist'] = array
 (
-	'label' 		=> &$GLOBALS['TL_LANG']['tl_settings']['piwikIpBlacklist'], 
-	'exclude' 		=> true, 
-	'inputType' 		=> 'multiColumnWizard',
-	'eval' 			=> array
+	'label'                         => &$GLOBALS['TL_LANG']['tl_settings']['piwikIpBlacklist'],
+	'exclude'                       => true, 
+	'inputType'                     => 'multiColumnWizard',
+	'eval'                          => array
 	(
-		'columnFields' => array
+		'columnFields'              => array
 		(
-			'ip' => array
+			'url'                   => array
 			(
-				'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['piwikIP'],
-				'exclude'               => true,
-				'inputType'             => 'text',
-				'eval'                  => array('style' => 'width:600px', 'rgxp' => 'IP')
+				'label'             => &$GLOBALS['TL_LANG']['tl_settings']['piwikIP'],
+				'inputType'         => 'text',
+				'eval'              => array
+				(
+					'style'         => 'width:600px',
+					'rgxp'          => 'IP'
+				)
 			),
 		)
 	)
 );
-
-
-?>

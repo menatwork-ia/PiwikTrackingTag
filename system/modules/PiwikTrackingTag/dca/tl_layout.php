@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -43,81 +43,124 @@ $GLOBALS['TL_DCA']['tl_layout']['subpalettes']['piwikEnabled'] = 'piwikPath,piwi
 /**
  * Fields
  */ 
-$GLOBALS['TL_DCA']['tl_layout']['fields'] = array_merge(
-	$GLOBALS['TL_DCA']['tl_layout']['fields'], array(
-		'piwikEnabled' => array(
+$GLOBALS['TL_DCA']['tl_layout']['fields'] = array_merge
+(
+	$GLOBALS['TL_DCA']['tl_layout']['fields'], array
+	(
+		'piwikEnabled' => array
+		(
 			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikEnabled'],
 			'inputType' => 'checkbox',
 			'exclude' => true,
 			'eval' => array('submitOnChange' => true)
 		),
-		'piwikPath' => array(
+		'piwikPath' => array
+		(
 			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikPath'],
 			'inputType' => 'text',
 			'exclude' => true,
-			'eval' => array('mandatory' => true, 'rgxp' => 'piwikPath', 'trailingSlash' => true, 'tl_class' => 'w50')
+			'eval' => array
+			(
+				'mandatory' => true,
+				'rgxp' => 'piwikPath',
+				'trailingSlash' => true,
+				'tl_class' => 'w50'
+			)
 		),
-		'piwikSiteID' => array(
+		'piwikSiteID' => array
+		(
 			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikSiteID'],
 			'inputType' => 'text',
 			'exclude' => true,
-			'eval' => array('mandatory' => true, 'rgxp' => 'digit', 'tl_class' => 'w50', 'maxlength' => 4)
+			'eval' => array
+			(
+				'mandatory' => true,
+				'rgxp' => 'digit',
+				'tl_class' => 'w50',
+				'maxlength' => 4
+			)
 		),
-		'piwikTemplate' => array(
+		'piwikTemplate' => array
+		(
 			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikTemplate'],
 			'inputType' => 'select',
 			'exclude' => true,
 			'options_callback' => array('PiwikTrackingTag', 'findPiwikTemplates'),
-			'load_callback' => array(array('PiwikTrackingTag', 'setDefaultValue')),
-			'eval' => array('mandatory' => true, 'tl_class' => 'w50', 'chosen'=> true, 'alwaysSave' => true)
+			'load_callback' => array
+			(
+				array('PiwikTrackingTag', 'setDefaultValue')
+			),
+			'eval' => array
+			(
+				'mandatory' => true,
+				'tl_class' => 'w50',
+				'chosen'=> true,
+				'alwaysSave' => true
+			)
 		),
-		'piwikExtensions' => array(
+		'piwikExtensions' => array
+		(
 			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikExtensions'],
-			// 'default' => '7z,aac,arc,arj,asf,asx,avi,bin,csv,doc,exe,flv,gif,gz,gzip,hqx,jar,jpe,jpeg,js,mp2,mp3,mp4,mpe,mpeg,mov,movie,msi,msp,pdf,phps,png,ppt,qtm,ram,rar,sea,sit,tar,tgz,orrent,txt,wav,wma,wmv,wpd,xls,xml,z,zip',
-			//'default' => array_keys($GLOBALS['TL_PIWIK']),
 			'default' => $GLOBALS['TL_PIWIK'],
 			'inputType' => 'textarea',
 			'exclude' => true,
-			'eval' => array('tl_class' => 'long clr', 'style' => 'height:50px;', 'alwaysSave' => true),
-			'load_callback'	=> array(
+			'eval' => array
+			(
+				'tl_class' => 'long clr',
+				'style' => 'height:50px;',
+				'alwaysSave' => true
+			),
+			'load_callback'	=> array
+			(
 				array('tl_layout_PiwikTrackingTag', 'extensions')
 			),
-			'save_callback'	=> array(
+			'save_callback'	=> array
+			(
 				array('tl_layout_PiwikTrackingTag', 'extensions')
 			)
 		),
-		'piwikCountAdmins' => array(
+		'piwikCountAdmins' => array
+		(
 			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikCountAdmins'],
 			'inputType' => 'checkbox',
 			'exclude' => true,
 			'eval' => array('tl_class' => 'w50')
 		),
-		'piwikCountUsers' => array(
+		'piwikCountUsers' => array
+		(
 			'label'	=> &$GLOBALS['TL_LANG']['tl_layout']['piwikCountUsers'],
 			'default' => '1',
 			'inputType' => 'checkbox',
 			'exclude' => true,
 			'eval' => array('tl_class' => 'w50')
 		),
-		'piwikPageName' => array(
+		'piwikPageName' => array
+		(
 			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikPageName'],
 			'inputType' => 'checkbox',
 			'exclude' => true,
 			'eval' => array('tl_class' => 'w50')
 		),
-		'piwik404' => array(
+		'piwik404' => array
+		(
 			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwik404'],
 			'inputType' => 'checkbox',
 			'exclude' => true,
 			'eval' => array('tl_class' => 'w50')
 		),
-        'piwikVisitorCookieTimeout' => array(
+		'piwikVisitorCookieTimeout' => array
+		(
 			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikVisitorCookieTimeout'],
 			'inputType' => 'text',
 			'exclude' => true,
-			'eval' => array('rgxp' => 'digit', 'tl_class' => 'w50')
+			'eval' => array
+			(
+				'rgxp' => 'digit',
+				'tl_class' => 'w50'
+			)
 		),
-		'piwikDownloadClasses' => array(
+		'piwikDownloadClasses' => array
+		(
 			'label' => &$GLOBALS['TL_LANG']['tl_layout']['piwikDownloadClasses'],
 			'inputType' => 'text',
 			'exclude' => true,
@@ -129,19 +172,16 @@ $GLOBALS['TL_DCA']['tl_layout']['fields'] = array_merge(
 class tl_layout_PiwikTrackingTag extends Backend
 {
 
-    public function extensions($value)
-    {
-        if (trim($value) == '')
-        {
-            return $GLOBALS['TL_DCA']['tl_layout']['fields']['piwikExtensions']['default'];
-        }
-        else
-        {
-            return $value;
-        }
-    }
+	public function extensions($value)
+	{
+		if (trim($value) == '')
+		{
+			return $GLOBALS['TL_DCA']['tl_layout']['fields']['piwikExtensions']['default'];
+		}
+		else
+		{
+			return $value;
+		}
+	}
 
 }
-
-
-?>

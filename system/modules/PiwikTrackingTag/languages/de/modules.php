@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -13,5 +13,3 @@
  * Back end modules
  */
 $GLOBALS['TL_LANG']['MOD']['PiwikTrackingTag'] = array('Piwik-Tracking-Tag im Frontend');
-
-?>

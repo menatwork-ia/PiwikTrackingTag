@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -22,5 +22,3 @@ $GLOBALS['TL_LANG']['tl_settings']['piwikUrl'] = array('URL', '');
 
 $GLOBALS['TL_LANG']['tl_settings']['piwikIpBlacklist'] = array('Blackliste für IP Adressen', 'Hier können Sie eine Liste der IPs pflegen bei denen Piwik nicht eingebunden werden soll.');
 $GLOBALS['TL_LANG']['tl_settings']['piwikIP'] = array('IP', '');
-
-?>
