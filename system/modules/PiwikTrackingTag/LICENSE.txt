@@ -1,14 +1,7 @@
 /**
  * Package      PiwikTrackingTag Extension
- * Copyright    MEN AT WORK 2013
+ * Copyright    MEN AT WORK 2014
  * Author       Andreas Isaak <cms@men-at-work.de>, David Maack <cms@men-at-work.de>, Stefan Heimes <cms@men-at-work.de>
  * Link         http://www.men-at-work.de/
- * License      GNU/LGPL
- */
- 
-/**
- * Package      PiwikTrackingTag Extension
- * Copyright    Torben Stoffer 2009
- * Author       Torben Stoffer <torben@online.de>
  * License      GNU/LGPL
  */
